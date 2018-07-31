@@ -6,7 +6,7 @@
     <groupId>com.iframe</groupId>
     <artifactId>springboot-iframe-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>springboot-iframe-parent</name>
     <description>Demo project for Spring Boot</description>
@@ -17,34 +17,127 @@
         <version>2.0.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <modules>
+        <module>springboot-iframe-beans</module>
+        <module>springboot-iframe-dao</module>
+        <module>springboot-iframe-isevice</module>
+        <module>springboot-iframe-service-impl</module>
+        <module>springboot-iframe-utils</module>
+        <module>springboot-iframe-web</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+
+        <!-- 在properties中统一控制依赖包的版本，更清晰-->
+        <dubbo.version>2.5.3</dubbo.version>
+        <zk.version>3.4.5</zk.version>
+        <zkclient.version>0.1</zkclient.version>
+
+        <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+        <iframe.core-finalName>iframe-core</iframe.core-finalName>
+        <iframe.control-finalName>iframe-control</iframe.control-finalName>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>development</id>
+            <properties>
+                <project.profile>development</project.profile>
+            </properties>
+            <repositories>
+            </repositories>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <project.profile>production</project.profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <project.profile>test</project.profile>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter</artifactId>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-test</artifactId>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>${dubbo.version}</version><!--使用properties中配置的版本号-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>${zk.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sgroschupf</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>${zkclient.version}</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <quiet>true</quiet>
+                            <files>
+                                <file>${user.dir}/config/${project.profile}.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-
 
 </project>

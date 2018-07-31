@@ -12,10 +12,9 @@
     <description>Demo project for Spring Boot</description>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.4.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.iframe</groupId>
+        <artifactId>springboot-iframe-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -38,10 +37,15 @@
     </dependencies>
 
     <build>
+        <finalName>${iframe.control-finalName}-1.0.0-SNAPSHOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+
+                </configuration>
             </plugin>
         </plugins>
     </build>
